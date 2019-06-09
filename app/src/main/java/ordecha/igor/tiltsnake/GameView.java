@@ -11,6 +11,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+//ToDo; Fix crashing while waking phone(something with onPause & onCreate)
+//ToDo: Label for current score
+//ToDo; Best Score
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Snake snake;
     private Food food;
@@ -19,7 +23,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int maxX;
     private int maxY;
     private int gridSize;
-    private int speed = 2;
+    private int speed = 1;
     private float rotX;
     private float rotY;
     private float rotZ;
@@ -37,7 +41,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         maxY = size.y;
         Log.d("xd", String.valueOf(maxY));
         gridSize = maxY/calculateAspectRatio(maxX, maxY);
-        snake = new Snake(Color.rgb(255,255,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
+        snake = new Snake(Color.rgb(255,255,255),Color.rgb(200,0,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
         food = new Food(Color.rgb(255,0,0), gridSize, maxX, maxY);
         setFocusable(true);
     }

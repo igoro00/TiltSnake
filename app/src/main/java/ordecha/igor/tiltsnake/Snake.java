@@ -3,11 +3,16 @@ package ordecha.igor.tiltsnake;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
+
+//ToDo: Death Detection
+//Todo: Anti-Go-Back feature
 
 class Snake {
-    private Rect rectangle;
+    private Rect[] tail;
     private int speed;
     private int color;
+    private int headColor;
     private int size;
     private int maxX;
     private int maxY;
@@ -15,34 +20,52 @@ class Snake {
     private int realY;
     private int shownX;
     private int shownY;
+    private int oldShownX=0;
+    private int oldShownY=0;
     private int total = 0;
-    Snake(int color, int size, int startX, int startY, int maX, int maxY, int speed){
-        this.rectangle = new Rect();
+
+
+    Snake(int color, int headColor, int size, int startX, int startY, int maX, int maxY, int speed){
         this.speed = speed;
         this.color = color;
+        this.headColor = headColor;
         this.size = size;
         this.maxX = maX;
         this.maxY = maxY;
         this.realX = startX;
         this.realY = startY;
-
-        rectangle.set(startX, startY, startX+size, startY+size);
+        tail = new Rect[255];
+        tail[0]=new Rect();
+        tail[0].set(startX, startY, startX+size, startY+size);
     }
 
     void draw(Canvas canvas){
-        rectangle.set(shownX, shownY, shownX+size, shownY+size);
         Paint paint = new Paint();
         paint.setColor(color);
-        canvas.drawRect(rectangle, paint);
+        Paint headPaint = new Paint();
+        headPaint.setColor(headColor);
+        for(int i = 0; i<=total;i++) {
+            if(i==total) {
+                canvas.drawRect(tail[i], headPaint);
+            }
+            else {
+                canvas.drawRect(tail[i], paint);
+            }
+        }
     }
 
     void update(float rotX, float rotY){
-        for(int i = 0; i<total; i++){
-
-        }
         realX+=rotX*speed;
         realY+=rotY*speed;
         matchToGrid();
+        if(oldShownX!=shownX || oldShownY!=shownY) {
+            for (int i = 0; i < total; i++) {
+                tail[i].set(tail[i + 1].left, tail[i + 1].top, tail[i + 1].right, tail[i + 1].bottom);
+            }
+            tail[total].set(shownX, shownY, shownX + size, shownY + size);
+            oldShownX = shownX;
+            oldShownY = shownY;
+        }
     }
 
 
@@ -50,7 +73,7 @@ class Snake {
         if(realX>maxX){
             realX=0;
         }
-        if(realY>maxY-10){
+        if(realY>maxY){
             realY=0;
         }
         if(realY<0){
@@ -68,6 +91,9 @@ class Snake {
     boolean eat(int foodX, int foodY){
         if(shownX==foodX && shownY==foodY){
             total++;
+            tail[total]=new Rect();
+            tail[total].set(shownX, shownY, shownX+size, shownY+size);
+            Log.d("xd", String.valueOf(total));
             return true;
         }
         else{
