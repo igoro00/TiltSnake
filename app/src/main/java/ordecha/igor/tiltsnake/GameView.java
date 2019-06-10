@@ -41,14 +41,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         maxY = size.y;
         Log.d("xd", String.valueOf(maxY));
         gridSize = maxY/calculateAspectRatio(maxX, maxY);
-        snake = new Snake(Color.rgb(255,255,255),Color.rgb(200,0,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
+        snake = new Snake(Color.rgb(55,0,55),Color.rgb(200,0,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
         food = new Food(Color.rgb(255,0,0), gridSize, maxX, maxY);
         setFocusable(true);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
-
+        //thread.setRunning(true);
+        //thread.start();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             } catch (InterruptedException e) {
                 Log.d("xd", e.toString());
             }
-            retry = false;
+            retry = !thread.isInterrupted();
         }
     }
 
@@ -77,11 +78,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(snake.eat(food.X, food.Y)){
             food.update();
         }
+        if(snake.die()){
+
+        }
     }
 
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
+        canvas.drawColor(Color.rgb(192, 192, 192));
         food.draw(canvas);
         snake.draw(canvas);
     }
@@ -90,10 +95,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         rotY = event.values[1];
         rotX = event.values[0];
         rotX=-rotX;
-    }
-
-    void onEat(){
-        food.update();
     }
 
     private int calculateAspectRatio(int X, int Y){

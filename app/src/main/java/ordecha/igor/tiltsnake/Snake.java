@@ -1,6 +1,7 @@
 package ordecha.igor.tiltsnake;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
@@ -10,14 +11,15 @@ import android.util.Log;
 
 class Snake {
     private Rect[] tail;
+    private Utils utils;
     private int speed;
     private int color;
     private int headColor;
     private int size;
     private int maxX;
     private int maxY;
-    private int realX;
-    private int realY;
+    private float realX;
+    private float realY;
     private int shownX;
     private int shownY;
     private int oldShownX=0;
@@ -34,23 +36,22 @@ class Snake {
         this.maxY = maxY;
         this.realX = startX;
         this.realY = startY;
+        utils = new Utils();
         tail = new Rect[255];
         tail[0]=new Rect();
         tail[0].set(startX, startY, startX+size, startY+size);
     }
 
     void draw(Canvas canvas){
+        float oneStep = (float)1/(total+1);
+        float realRatio;
         Paint paint = new Paint();
         paint.setColor(color);
-        Paint headPaint = new Paint();
-        headPaint.setColor(headColor);
         for(int i = 0; i<=total;i++) {
-            if(i==total) {
-                canvas.drawRect(tail[i], headPaint);
-            }
-            else {
-                canvas.drawRect(tail[i], paint);
-            }
+            realRatio = (float)1-(i*oneStep);
+            Log.d("colorRatio", String.valueOf(realRatio));
+            paint.setColor(utils.blendColors(headColor, color, realRatio));
+            canvas.drawRect(tail[i], paint);
         }
     }
 
@@ -73,19 +74,19 @@ class Snake {
         if(realX>maxX){
             realX=0;
         }
-        if(realY>maxY){
+        if(realY>maxY-size){
             realY=0;
         }
         if(realY<0){
-            realY=maxY;
+            realY=maxY-size;
         }
         if(realX<0){
             realX = maxX;
         }
         //shownX = realX;
         //shownY = realY;
-        shownX = realX/size*size;
-        shownY = realY/size*size;
+        shownX = (int)realX/size*size;
+        shownY = (int)realY/size*size;
     }
 
     boolean eat(int foodX, int foodY){
@@ -100,4 +101,14 @@ class Snake {
             return false;
         }
     }
+
+    boolean die(){
+        for(int i = 1; i<=total;i++){
+            if(shownY == tail[i].top  && shownX == tail[i].left ){
+                return false;
+            }
+        }
+        return false;
+    }
+
 }
