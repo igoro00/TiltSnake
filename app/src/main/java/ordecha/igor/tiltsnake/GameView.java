@@ -18,7 +18,7 @@ import android.view.WindowManager;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Snake snake;
     private Food food;
-
+    int points = 0;
     private MainThread thread;
     private int maxX;
     private int maxY;
@@ -78,6 +78,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         snake.update(rotX, rotY);
         if(snake.eat(food.X, food.Y)){
             food.update();
+            points++;
         }
         if(snake.die()){
 

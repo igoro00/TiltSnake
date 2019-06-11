@@ -12,6 +12,7 @@ import android.util.Log;
 class Snake {
     Rect[] tail;
     private Utils utils;
+    private int[] lastDir={0,0};
     private int speed;
     private int color;
     private int headColor;
@@ -20,10 +21,10 @@ class Snake {
     private int maxY;
     private float realX;
     private float realY;
-    int shownX;
-    int shownY;
-    private int oldShownX=0;
-    private int oldShownY=0;
+    private int shownX;
+    private int shownY;
+    private int oldShownX=-1;
+    private int oldShownY=-1;
     int total = 0;
 
 
@@ -43,12 +44,12 @@ class Snake {
     }
 
     void draw(Canvas canvas){
-        float oneStep = (float)1/(total+1);
-        float realRatio;
+        double oneStep = (double)1/(total+1);
+        double realRatio;
         Paint paint = new Paint();
         paint.setColor(color);
         for(int i = 0; i<=total;i++) {
-            realRatio = (float)1-(i*oneStep);
+            realRatio = (double)1-(i*oneStep);
             Log.d("colorRatio", String.valueOf(realRatio));
             paint.setColor(utils.blendColors(headColor, color, realRatio));
             canvas.drawRect(tail[i], paint);
@@ -60,28 +61,37 @@ class Snake {
         realY+=rotY*speed;
         matchToGrid();
         if(oldShownX!=shownX || oldShownY!=shownY) {
-            for (int i = 0; i < total; i++) {
-                tail[i].set(tail[i + 1].left, tail[i + 1].top, tail[i + 1].right, tail[i + 1].bottom);
+            if(!isGoingBackwards(lastDir, chckChange()) || total == 0) {
+                lastDir = chckChange();
+                for (int i = 0; i < total; i++) {
+                    tail[i].set(tail[i + 1].left, tail[i + 1].top, tail[i + 1].right, tail[i + 1].bottom);
+                }
+                tail[total].set(shownX, shownY, shownX + size, shownY + size);
+                oldShownX = shownX;
+                oldShownY = shownY;
             }
-            tail[total].set(shownX, shownY, shownX + size, shownY + size);
-            oldShownX = shownX;
-            oldShownY = shownY;
+            else{
+                shownX = oldShownX;
+                realX = oldShownX;
+                shownY = oldShownY;
+                realY = oldShownY;
+            }
         }
     }
 
 
     private void matchToGrid(){
         if(realX>maxX){
-            realX=0;
+            realX=maxX;
         }
         if(realY>maxY-size){
-            realY=0;
-        }
-        if(realY<0){
             realY=maxY-size;
         }
+        if(realY<0){
+            realY=0;
+        }
         if(realX<0){
-            realX = maxX;
+            realX = 0;
         }
         //shownX = realX;
         //shownY = realY;
@@ -107,6 +117,39 @@ class Snake {
             if(shownY == tail[i].top  && shownX == tail[i].left ){
                 return false;
             }
+        }
+        return false;
+    }
+
+    private int[] chckChange(){
+        int[] output = {0, 0};
+        if(oldShownX>shownX){
+            output[0] = -1;
+        }
+        if(oldShownX<shownX){
+            output[0] = 1;
+        }
+        if(oldShownY>shownY){
+            output[1] = -1;
+        }
+        if(oldShownY<shownY){
+            output[1] = 1;
+        }
+        return output;
+    }
+
+    private boolean isGoingBackwards(int[] oldDir, int[] newDir){
+        if(oldDir[0]==-1 && newDir[0]==1){
+            return true;
+        }
+        else if(oldDir[0]==1 && newDir[0]==-1){
+            return true;
+        }
+        else if(oldDir[1]==-1 && newDir[1]==1){
+            return true;
+        }
+        else if(oldDir[1]==1 && newDir[1]==-1){
+            return true;
         }
         return false;
     }

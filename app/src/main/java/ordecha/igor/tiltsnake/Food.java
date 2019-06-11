@@ -3,12 +3,15 @@ package ordecha.igor.tiltsnake;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
+
 import java.util.Random;
 
 class Food {
     private Rect rectangle;
     private Snake snake;
     private Random random;
+    private int points = 0;
     private int color;
     private int size;
     private int maxX;
@@ -27,8 +30,10 @@ class Food {
     }
 
     void update(){
-        while(chckPos(X, Y)) {
-            randomize();
+        randomize();
+        if(chckPos(X, Y)) {
+            update();
+            return;
         }
         rectangle.set(X, Y, X + size, Y + size);
     }
@@ -47,11 +52,13 @@ class Food {
     }
 
     private boolean chckPos(int X, int Y){
-        for(int i= 0; i<snake.total; i++){
+        for(int i= 0; i<=snake.total; i++){
             if( X == snake.tail[i].left && Y == snake.tail[i].top){
                 return true;
             }
         }
         return false;
     }
+
+    private void updatePoints(int pnts){points = pnts;}
 }
