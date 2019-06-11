@@ -7,26 +7,30 @@ import java.util.Random;
 
 class Food {
     private Rect rectangle;
-    Random random;
+    private Snake snake;
+    private Random random;
     private int color;
     private int size;
     private int maxX;
     private int maxY;
     int X;
     int Y;
-    Food(int color, int size, int maxX, int maxY){
+    Food(int color, int size, int maxX, int maxY, Snake snake){
         this.rectangle = new Rect();
         this.color = color;
         this.size = size;
         this.maxX = maxX;
         this.maxY = maxY;
+        this.snake = snake;
         random = new Random();
         update();
     }
 
     void update(){
-        randomize();
-        rectangle.set(X, Y, X+size, Y+size);
+        while(chckPos(X, Y)) {
+            randomize();
+        }
+        rectangle.set(X, Y, X + size, Y + size);
     }
 
     void draw(Canvas canvas){
@@ -35,10 +39,19 @@ class Food {
         canvas.drawRect(rectangle, paint);
     }
 
-    void randomize(){
+    private void randomize(){
         X = random.nextInt(maxX);
-        Y = random.nextInt(maxY);
+        Y = random.nextInt(maxY-size);
         X = X/size*size;
         Y = Y/size*size;
+    }
+
+    private boolean chckPos(int X, int Y){
+        for(int i= 0; i<snake.total; i++){
+            if( X == snake.tail[i].left && Y == snake.tail[i].top){
+                return true;
+            }
+        }
+        return false;
     }
 }

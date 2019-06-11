@@ -42,7 +42,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         Log.d("xd", String.valueOf(maxY));
         gridSize = maxY/calculateAspectRatio(maxX, maxY);
         snake = new Snake(Color.rgb(55,0,55),Color.rgb(200,0,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
-        food = new Food(Color.rgb(255,0,0), gridSize, maxX, maxY);
+        food = new Food(Color.rgb(255,0,0), gridSize, maxX, maxY, snake);
         setFocusable(true);
     }
 
@@ -61,12 +61,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder){
         boolean retry = true;
+        Log.d("xd", "surfaceDestroyed");
         while(retry) {
             try {
                 thread.setRunning(false);
                 thread.join();
             } catch (InterruptedException e) {
-                Log.d("xd", e.toString());
+                Log.d("xd", e.toString() + "kurwa");
             }
             retry = !thread.isInterrupted();
         }

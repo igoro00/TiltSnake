@@ -10,7 +10,7 @@ import android.util.Log;
 //Todo: Anti-Go-Back feature
 
 class Snake {
-    private Rect[] tail;
+    Rect[] tail;
     private Utils utils;
     private int speed;
     private int color;
@@ -20,11 +20,11 @@ class Snake {
     private int maxY;
     private float realX;
     private float realY;
-    private int shownX;
-    private int shownY;
+    int shownX;
+    int shownY;
     private int oldShownX=0;
     private int oldShownY=0;
-    private int total = 0;
+    int total = 0;
 
 
     Snake(int color, int headColor, int size, int startX, int startY, int maX, int maxY, int speed){
