@@ -6,8 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
-//ToDo: Death Detection
-//Todo: Anti-Go-Back feature
 
 class Snake {
     Rect[] tail;
@@ -50,7 +48,7 @@ class Snake {
         paint.setColor(color);
         for(int i = 0; i<=total;i++) {
             realRatio = (double)1-(i*oneStep);
-            Log.d("colorRatio", String.valueOf(realRatio));
+            //Log.d("colorRatio", String.valueOf(realRatio));
             paint.setColor(utils.blendColors(headColor, color, realRatio));
             canvas.drawRect(tail[i], paint);
         }

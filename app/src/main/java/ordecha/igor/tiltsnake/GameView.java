@@ -11,14 +11,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-//ToDo; Fix crashing while waking phone(something with onPause & onCreate)
-//ToDo: Label for current score
-//ToDo; Best Score
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Snake snake;
     private Food food;
-    int points = 0;
+    private int points = 0;
     private MainThread thread;
     private int maxX;
     private int maxY;
@@ -43,17 +40,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gridSize = maxY/calculateAspectRatio(maxX, maxY);
         snake = new Snake(Color.rgb(55,0,55),Color.rgb(200,0,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
         food = new Food(Color.rgb(255,0,0), gridSize, maxX, maxY, snake);
+
         setFocusable(true);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
-        //thread.setRunning(true);
-        //thread.start();
+
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
+        thread = new MainThread(getHolder(), this);
         thread.setRunning(true);
         thread.start();
     }
@@ -61,15 +59,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder){
         boolean retry = true;
-        Log.d("xd", "surfaceDestroyed");
         while(retry) {
             try {
                 thread.setRunning(false);
                 thread.join();
-            } catch (InterruptedException e) {
-                Log.d("xd", e.toString() + "kurwa");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            retry = !thread.isInterrupted();
+            retry = false;
         }
     }
 
