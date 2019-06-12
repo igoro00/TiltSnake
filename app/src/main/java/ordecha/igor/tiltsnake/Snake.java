@@ -42,12 +42,12 @@ class Snake {
     }
 
     void draw(Canvas canvas){
-        double oneStep = (double)1/(total+1);
-        double realRatio;
+        float oneStep = (float)1/(total+1);
+        float realRatio;
         Paint paint = new Paint();
         paint.setColor(color);
         for(int i = 0; i<=total;i++) {
-            realRatio = (double)1-(i*oneStep);
+            realRatio = (float)1-(i*oneStep);
             //Log.d("colorRatio", String.valueOf(realRatio));
             paint.setColor(utils.blendColors(headColor, color, realRatio));
             canvas.drawRect(tail[i], paint);
@@ -91,13 +91,18 @@ class Snake {
         if(realX<0){
             realX = 0;
         }
-        //shownX = realX;
-        //shownY = realY;
+        //pixel style
         shownX = (int)realX/size*size;
         shownY = (int)realY/size*size;
+
+        //non-pixel style
+        //shownX = (int)realX;
+        //shownY = (int)realY;
+
     }
 
     boolean eat(int foodX, int foodY){
+        //pixel style
         if(shownX==foodX && shownY==foodY){
             total++;
             tail[total]=new Rect();
@@ -108,6 +113,19 @@ class Snake {
         else{
             return false;
         }
+
+        //non-pixel style
+        /*
+        if(utils.naturalNumber(shownX-foodX)<10 && utils.naturalNumber(shownY-foodY)<10){
+            total++;
+            tail[total]=new Rect();
+            tail[total].set(shownX, shownY, shownX+size, shownY+size);
+            Log.d("xd", String.valueOf(total));
+            return true;
+        }
+        else{
+            return false;
+        }*/
     }
 
     boolean die(){

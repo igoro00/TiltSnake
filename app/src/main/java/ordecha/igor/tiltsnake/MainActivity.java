@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event){
-        gmV.onSensorChanged(event);
+        gmV.recieveSensor(event);
     }
 
     @Override

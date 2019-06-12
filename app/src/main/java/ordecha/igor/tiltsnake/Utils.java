@@ -10,4 +10,15 @@ class Utils {
         double b = (Color.blue(color1) * ratio) + (Color.blue(color2) * inverseRation);
         return Color.rgb((int) r, (int) g, (int) b);
     }
+
+    int naturalNumber(int input){
+        int output;
+        if(input>=0){
+            output = input;
+        }
+        else{
+            output = -input;
+        }
+        return output;
+    }
 }
