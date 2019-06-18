@@ -2,8 +2,8 @@ package ordecha.igor.tiltsnake;
 
 import android.graphics.Color;
 
-class Utils {
-    int blendColors(int color1, int color2, double ratio) {
+public class Utils {
+    public int blendColors(int color1, int color2, double ratio) {
         final double inverseRation = 1f - ratio;
         double r = (Color.red(color1) * ratio) + (Color.red(color2) * inverseRation);
         double g = (Color.green(color1) * ratio) + (Color.green(color2) * inverseRation);
@@ -11,7 +11,7 @@ class Utils {
         return Color.rgb((int) r, (int) g, (int) b);
     }
 
-    int naturalNumber(int input){
+    public int naturalNumber(int input){
         int output;
         if(input>=0){
             output = input;

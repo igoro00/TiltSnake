@@ -1,4 +1,4 @@
-package ordecha.igor.tiltsnake;
+package ordecha.igor.tiltsnake.Gameplay;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import ordecha.igor.tiltsnake.Scene;
+import ordecha.igor.tiltsnake.SceneManager;
 
-public class GameplayScene implements Scene{
+public class GameplayScene implements Scene {
 
     private Snake snake;
     private Food food;
@@ -26,7 +28,7 @@ public class GameplayScene implements Scene{
     private float rotY;
     private float rotZ;
 
-    GameplayScene(Context context){
+    public GameplayScene(Context context){
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -43,6 +45,7 @@ public class GameplayScene implements Scene{
     public void terminate(){
         SceneManager.ACTIVE_SCENE = 0;
     }
+
     @Override
     public void draw(Canvas canvas){
         canvas.drawColor(Color.rgb(192, 192, 192));
@@ -51,18 +54,23 @@ public class GameplayScene implements Scene{
     }
     @Override
     public void update(){
-        snake.update(rotX, rotY);
-        if(snake.eat(food.X, food.Y)){
-            food.update();
-            points++;
-        }
         if(snake.die()){
-
+            reset();
+            SceneManager.ACTIVE_SCENE = 1;
+        }
+        else {
+            snake.update(rotX, rotY);
+            if (snake.eat(food.X, food.Y)) {
+                food.update();
+                points++;
+            }
         }
     }
     @Override
     public void recieveTouch(MotionEvent event){
-
+        snake.cheat();
+        //food.update();
+        points++;
     }
 
     @Override
@@ -90,5 +98,11 @@ public class GameplayScene implements Scene{
             }
         }
         return 25;
+    }
+
+    public void reset(){
+        points = 0;
+        this.snake = new Snake(Color.rgb(55,0,55),Color.rgb(200,0,255), gridSize, maxX/2, maxY/2, maxX, maxY, speed);
+        this.food = new Food(Color.rgb(255,0,0), gridSize, maxX, maxY, snake);
     }
 }

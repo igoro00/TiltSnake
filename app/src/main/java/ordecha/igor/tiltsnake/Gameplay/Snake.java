@@ -1,14 +1,16 @@
-package ordecha.igor.tiltsnake;
+package ordecha.igor.tiltsnake.Gameplay;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
+import ordecha.igor.tiltsnake.Utils;
 
 
 class Snake {
     Rect[] tail;
+    private boolean justEaten = false;
     private Utils utils;
     private int[] lastDir={0,0};
     private int speed;
@@ -61,12 +63,18 @@ class Snake {
         if(oldShownX!=shownX || oldShownY!=shownY) {
             if(!isGoingBackwards(lastDir, chckChange()) || total == 0) {
                 lastDir = chckChange();
+
+                //tail
                 for (int i = 0; i < total; i++) {
                     tail[i].set(tail[i + 1].left, tail[i + 1].top, tail[i + 1].right, tail[i + 1].bottom);
                 }
+
+                //head
                 tail[total].set(shownX, shownY, shownX + size, shownY + size);
+
                 oldShownX = shownX;
                 oldShownY = shownY;
+                justEaten = false;
             }
             else{
                 shownX = oldShownX;
@@ -105,6 +113,7 @@ class Snake {
         //pixel style
         if(shownX==foodX && shownY==foodY){
             total++;
+            justEaten = true;
             tail[total]=new Rect();
             tail[total].set(shownX, shownY, shownX+size, shownY+size);
             Log.d("xd", String.valueOf(total));
@@ -129,9 +138,11 @@ class Snake {
     }
 
     boolean die(){
-        for(int i = 1; i<=total;i++){
+        for(int i = 0; i<=total-1;i++){
             if(shownY == tail[i].top  && shownX == tail[i].left ){
-                return false;
+                if(!justEaten) {
+                    return true;
+                }
             }
         }
         return false;
@@ -168,6 +179,13 @@ class Snake {
             return true;
         }
         return false;
+    }
+
+    void cheat(){
+        total++;
+        justEaten = true;
+        tail[total]=new Rect();
+        tail[total].set(shownX, shownY, shownX+size, shownY+size);
     }
 
 }
