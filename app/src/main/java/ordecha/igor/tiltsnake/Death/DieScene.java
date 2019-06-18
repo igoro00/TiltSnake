@@ -50,18 +50,37 @@ public class DieScene implements Scene {
     }
     @Override
     public void update(){
-
+        resetButton.update();
+        homeButton.update();
     }
 
     @Override
     public void recieveTouch(MotionEvent event){
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if(resetButton.left<event.getX()&& event.getX()<resetButton.right
+                && resetButton.top<event.getY() && resetButton.bottom>event.getY()){
+                    resetButton.update(true);
+                }
+                if(homeButton.left<event.getX()&& event.getX()<homeButton.right
+                        && homeButton.top<event.getY() && homeButton.bottom>event.getY()){
+                    homeButton.update(true);
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 break;
             case MotionEvent.ACTION_UP:
-                SceneManager.ACTIVE_SCENE = 0;
+                resetButton.update(false);
+                homeButton.update(false);
+
+                if(resetButton.left<event.getX()&& event.getX()<resetButton.right
+                        && resetButton.top<event.getY() && resetButton.bottom>event.getY()){
+                    SceneManager.ACTIVE_SCENE = 0;
+                }
+                if(homeButton.left<event.getX()&& event.getX()<homeButton.right
+                        && homeButton.top<event.getY() && homeButton.bottom>event.getY()){
+                    //SceneManager.ACTIVE_SCENE = 0;
+                }
                 break;
         }
         Log.d("xd", "ACTIVE_SCENE: " + String.valueOf(SceneManager.ACTIVE_SCENE));

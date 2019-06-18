@@ -4,10 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
+import ordecha.igor.tiltsnake.Utils;
 
 public class Button {
     private Rect rectangle;
     private Paint paint;
+    private Utils utils;
 
     private int startY;
     private int height;
@@ -15,8 +18,10 @@ public class Button {
 
     int top, bottom, left, right;
 
-    private int colorUnclicked = Color.BLACK;
-    private int colorClicked = Color.rgb(47, 47, 47);
+    private int colorUnclicked = Color.rgb(0,0,0);
+    private int colorClicked = Color.rgb(100, 100, 100);
+    private int blend = 0;
+    private int dstBlend = 0;
 
     private int purpose;
 
@@ -28,6 +33,7 @@ public class Button {
     Button(int maxX, int height, int offset, int purpose, int startY){
         this.rectangle = new Rect();
         this.paint = new Paint();
+        this.utils = new Utils();
         this.purpose = purpose;
         this.height = height;
         this.startY = startY;
@@ -40,14 +46,29 @@ public class Button {
         this.bottom = startY+offset+height;
 
         rectangle.set(left, top, right, bottom);
+
+        paint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
     }
 
-    public void update(boolean isClicked){
+    void update(boolean isClicked){
         if(isClicked){
-            paint.setColor(colorClicked);
+            dstBlend = 1024;
         }
         else{
-            paint.setColor(colorUnclicked);
+            dstBlend = 0;
+        }
+    }
+
+    void update(){
+        if(blend != dstBlend){
+            if(blend<dstBlend){
+                blend+=64;
+            }
+            else{
+                blend-=64;
+            }
+            paint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
+            //Log.d("ColorRatio", String.valueOf(blend));
         }
     }
 
