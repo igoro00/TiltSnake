@@ -14,7 +14,7 @@ public class SceneManager {
     public static int ACTIVE_SCENE;
 
     SceneManager(Context context){
-        ACTIVE_SCENE = 0;
+        ACTIVE_SCENE = 1;
         scenes.add(new GameplayScene(context));
         scenes.add(new DieScene(context));
     }

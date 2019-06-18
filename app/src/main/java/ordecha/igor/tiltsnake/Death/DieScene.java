@@ -13,6 +13,9 @@ import ordecha.igor.tiltsnake.SceneManager;
 public class DieScene implements Scene {
 
     private ImageZdehues image;
+    private TextBox textBox;
+    private Button resetButton;
+    private Button homeButton;
     private int maxX;
     private int maxY;
     private int offset;
@@ -25,6 +28,9 @@ public class DieScene implements Scene {
         maxY = size.y;
         offset = maxX / 13;
         image = new ImageZdehues(context, maxX, maxY, offset);
+        textBox = new TextBox(maxX,300, offset, image.getBottomY());
+        resetButton = new Button(maxX, 200, offset, 0, textBox.getBottomY());
+        homeButton = new Button(maxX, 200, offset, 1, resetButton.getBottomY());
 
     }
 
@@ -36,6 +42,9 @@ public class DieScene implements Scene {
     public void draw(Canvas canvas){
         canvas.drawColor(Color.rgb(192, 192, 192));
         image.draw(canvas);
+        textBox.draw(canvas);
+        resetButton.draw(canvas);
+        homeButton.draw(canvas);
 
 
     }
