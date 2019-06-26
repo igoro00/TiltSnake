@@ -1,6 +1,8 @@
 package ordecha.igor.tiltsnake.Death;
 
 import android.graphics.*;
+import android.util.Log;
+import ordecha.igor.tiltsnake.SceneManager;
 import ordecha.igor.tiltsnake.Utils;
 
 import java.util.Random;
@@ -20,14 +22,19 @@ public class TextBox {
     private int top, bottom, left, right;
 
     private String[] texts1 = {
-      "Nawet nie próbuj!"
+            "Nawet nie próbuj!",
+            "Nie martw się,",
+            "Marnujesz tylko czas!"
     };
     private String[] texts2 = {
-       "Znowu zginiesz."
+            "Znowu zginiesz.",
+            "tak miało być",
+            ""
     };
 
     TextBox(int maxX, int height, int offset, int startY){
         if(chckTexts()) {
+            generator.setSeed(System.currentTimeMillis()/10000);
             this.rectangle = new RectF();
             this.rectPaint = new Paint();
             this.txtPaint = new Paint();
@@ -51,10 +58,13 @@ public class TextBox {
 
     public void draw(Canvas canvas){
         canvas.drawRoundRect(rectangle, 10, 10, rectPaint);
-        //canvas.drawText(texts1[currentTXT], offset+20, startY+offset+txtPaint.getTextSize()+20, txtPaint);
-        //canvas.drawText(texts2[currentTXT], offset+20, startY+offset+height-60, txtPaint);
-        utils.drawTextCentered(texts1[currentTXT], left+((right-left)/2)-30, top+(int)((bottom-top)*0.3), txtPaint, canvas);
-        utils.drawTextCentered(texts2[currentTXT], left+((right-left)/2)+50, top+(int)((bottom-top)*0.7), txtPaint, canvas);
+        if(!texts2[currentTXT].equals("")) {
+            utils.drawTextCentered(texts1[currentTXT], left + ((right - left) / 2), top + (int) ((bottom - top) * 0.3), txtPaint, canvas);
+            utils.drawTextCentered(texts2[currentTXT], left + ((right - left) / 2), top + (int) ((bottom - top) * 0.7), txtPaint, canvas);
+        }
+        else{
+            utils.drawTextCentered(texts1[currentTXT], left + ((right - left) / 2), top + (int) ((bottom - top) * 0.5), txtPaint, canvas);
+        }
     }
 
     int getBottomY(){
@@ -63,7 +73,11 @@ public class TextBox {
     }
 
     void update(){
-        currentTXT = generator.nextInt(currentTXT+1);
+        if(SceneManager.JUST_DIED) {
+            currentTXT = generator.nextInt(texts1.length);
+            SceneManager.JUST_DIED = false;
+            Log.d("xd", "reshuffled. new number is:  " + String.valueOf(currentTXT) + "  out of:  " + String.valueOf(texts1.length-1));
+        }
     }
 
     private boolean chckTexts(){
