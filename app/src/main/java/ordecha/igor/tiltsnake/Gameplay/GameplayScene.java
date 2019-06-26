@@ -56,7 +56,8 @@ public class GameplayScene implements Scene {
     public void update(){
         if(snake.die()){
             reset();
-            SceneManager.ACTIVE_SCENE = 1;
+            SceneManager.ACTIVE_SCENE = 2;
+            SceneManager.JUST_DIED = true;
         }
         else {
             snake.update(rotX, rotY);

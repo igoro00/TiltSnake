@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import ordecha.igor.tiltsnake.Button;
 import ordecha.igor.tiltsnake.Scene;
 import ordecha.igor.tiltsnake.SceneManager;
 
@@ -16,21 +17,19 @@ public class DieScene implements Scene {
     private TextBox textBox;
     private Button resetButton;
     private Button homeButton;
-    private int maxX;
-    private int maxY;
-    private int offset;
+
     public DieScene(Context context){
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        maxX = size.x;
-        maxY = size.y;
-        offset = maxX / 13;
+        int maxX = size.x;
+        int maxY = size.y;
+        int offset = maxX / 13;
         image = new ImageZdehues(context, maxX, maxY, offset);
         textBox = new TextBox(maxX,300, offset, image.getBottomY());
-        resetButton = new Button(maxX, 200, offset, 0, textBox.getBottomY());
-        homeButton = new Button(maxX, 200, offset, 1, resetButton.getBottomY());
+        resetButton = new Button(maxX, 200, offset, "Spróbuj Ponownie", textBox.getBottomY());
+        homeButton = new Button(maxX, 200, offset, "Menu Główne", resetButton.getBottomY());
 
     }
 
@@ -76,11 +75,11 @@ public class DieScene implements Scene {
 
                 if(resetButton.left<event.getX()&& event.getX()<resetButton.right
                         && resetButton.top<event.getY() && resetButton.bottom>event.getY()){
-                    SceneManager.ACTIVE_SCENE = 0;
+                    SceneManager.ACTIVE_SCENE = 1;
                 }
                 if(homeButton.left<event.getX()&& event.getX()<homeButton.right
                         && homeButton.top<event.getY() && homeButton.bottom>event.getY()){
-                    //SceneManager.ACTIVE_SCENE = 0;
+                    SceneManager.ACTIVE_SCENE = 0;
                 }
                 break;
         }

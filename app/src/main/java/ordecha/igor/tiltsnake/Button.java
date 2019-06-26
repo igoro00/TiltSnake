@@ -1,8 +1,6 @@
-package ordecha.igor.tiltsnake.Death;
+package ordecha.igor.tiltsnake;
 
 import android.graphics.*;
-import android.util.Log;
-import ordecha.igor.tiltsnake.Utils;
 
 public class Button {
     private RectF rectangle;
@@ -10,37 +8,27 @@ public class Button {
 
     private Paint txtPaint = new Paint();
 
-    private Utils utils;
+    private Utils utils = new Utils();
 
     private int startY;
     private int height;
     private int offset;
 
-    int top, bottom, left, right;
+    public int top, bottom, left, right;
 
     private int colorUnclicked = Color.rgb(0,0,0);
     private int colorClicked = Color.rgb(100, 100, 100);
     private int blend = 0;
     private int dstBlend = 0;
 
-    private int purpose;
+    private String text;
 
-    String text;
 
-    Button(int maxX, int height, int offset, int purpose, int startY){
+    public Button(int maxX, int height, int offset, String text, int startY){
         this.rectangle = new RectF();
         this.rectPaint = new Paint();
 
-        this.utils = new Utils();
-
-        //reset gets purpose=0, home gets purpose=1 in lines: 32, 33 in DieScene class
-        //this if sets their texts to buttons.
-        if(purpose == 0){
-            text = "Spróbuj\nponownie";
-        }
-        else{
-            text = "Menu\ngłówne";
-        }
+        this.text = text;
 
         txtPaint.setStyle(Paint.Style.FILL);
         txtPaint.setColor(Color.WHITE);
@@ -60,7 +48,7 @@ public class Button {
         rectPaint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
     }
 
-    void update(boolean isClicked){
+    public void update(boolean isClicked){
 
         if(isClicked){
             dstBlend = 1024;
@@ -70,7 +58,7 @@ public class Button {
         }
     }
 
-    void update(){
+    public void update(){
         if(blend != dstBlend){
             if(blend<dstBlend){
                 blend+=64;
@@ -88,7 +76,7 @@ public class Button {
         utils.drawTextCentered(text, left+((right-left)/2), top+((bottom-top)/2), txtPaint, canvas);
     }
 
-    int getBottomY(){
+    public int getBottomY(){
         double output = offset + startY + height;
         return (int) output;
     }
