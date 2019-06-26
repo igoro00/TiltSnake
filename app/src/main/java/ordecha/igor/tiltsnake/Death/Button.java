@@ -1,15 +1,15 @@
 package ordecha.igor.tiltsnake.Death;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.util.Log;
 import ordecha.igor.tiltsnake.Utils;
 
 public class Button {
-    private Rect rectangle;
-    private Paint paint;
+    private RectF rectangle;
+    private Paint rectPaint;
+
+    private Paint txtPaint = new Paint();
+
     private Utils utils;
 
     private int startY;
@@ -25,20 +25,30 @@ public class Button {
 
     private int purpose;
 
-    String[] txts = {
-        "Spróbuj\nponownie",
-        "Menu\ngłówne"
-    };
+    String text;
 
     Button(int maxX, int height, int offset, int purpose, int startY){
-        this.rectangle = new Rect();
-        this.paint = new Paint();
+        this.rectangle = new RectF();
+        this.rectPaint = new Paint();
+
         this.utils = new Utils();
-        this.purpose = purpose;
+
+        //reset gets purpose=0, home gets purpose=1 in lines: 32, 33 in DieScene class
+        //this if sets their texts to buttons.
+        if(purpose == 0){
+            text = "Spróbuj\nponownie";
+        }
+        else{
+            text = "Menu\ngłówne";
+        }
+
+        txtPaint.setStyle(Paint.Style.FILL);
+        txtPaint.setColor(Color.WHITE);
+        txtPaint.setTextSize(80);
+
         this.height = height;
         this.startY = startY;
         this.offset = offset;
-
 
         this.left = offset*2;
         this.top = startY+offset;
@@ -47,10 +57,11 @@ public class Button {
 
         rectangle.set(left, top, right, bottom);
 
-        paint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
+        rectPaint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
     }
 
     void update(boolean isClicked){
+
         if(isClicked){
             dstBlend = 1024;
         }
@@ -67,18 +78,23 @@ public class Button {
             else{
                 blend-=64;
             }
-            paint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
+            rectPaint.setColor(utils.blendColors(colorClicked, colorUnclicked, (double)blend/1024));
             //Log.d("ColorRatio", String.valueOf(blend));
         }
     }
 
     public void draw(Canvas canvas){
-        canvas.drawRect(rectangle, paint);
+        canvas.drawRoundRect(rectangle, 30, 30, rectPaint);
+        utils.drawTextCentered(text, left+((right-left)/2), top+((bottom-top)/2), txtPaint, canvas);
     }
 
     int getBottomY(){
         double output = offset + startY + height;
         return (int) output;
     }
+
+
+    //by Borislav Markov from StackOverFlow
+
 
 }

@@ -1,6 +1,9 @@
 package ordecha.igor.tiltsnake;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.widget.Toast;
 
 public class Utils {
     public int blendColors(int color1, int color2, double ratio) {
@@ -20,5 +23,12 @@ public class Utils {
             output = -input;
         }
         return output;
+    }
+
+    public void drawTextCentered(String text, int x, int y, Paint paint, Canvas canvas) {
+        int xPos = x - (int)(paint.measureText(text)/2);
+        int yPos = (int) (y - ((paint.descent() + paint.ascent()) / 2)) ;
+
+        canvas.drawText(text, xPos, yPos, paint);
     }
 }

@@ -8,11 +8,15 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     Sensor accelerometer;
     GameView gmV;
+    private long backPressedTime;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +36,27 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy){
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+    @Override
+    public void onBackPressed () {
+        if(SceneManager.ACTIVE_SCENE==0){
+            if(backPressedTime + 2000 > System.currentTimeMillis()){
+                super.onBackPressed();
+                return;
+            } else {
+                Toast.makeText(getBaseContext(), "Naciśnij ponownie by wyjść z gry", 2000).show();
+            }
+
+            backPressedTime = System.currentTimeMillis();
+        }
+        else{
+            super.onBackPressed();
+            return;
+        }
+
+    }
+
 }

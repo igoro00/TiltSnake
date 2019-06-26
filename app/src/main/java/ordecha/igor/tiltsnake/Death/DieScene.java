@@ -52,6 +52,7 @@ public class DieScene implements Scene {
     public void update(){
         resetButton.update();
         homeButton.update();
+        textBox.update();
     }
 
     @Override

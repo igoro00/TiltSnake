@@ -31,7 +31,7 @@ class ImageZdehues {
     }
 
     int getBottomY(){
-        return (int)scaledY+(3* offset);
+        return (int)scaledY+(int)(2.5* offset);
     }
 
 }

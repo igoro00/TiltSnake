@@ -13,7 +13,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
-    private SceneManager manager;
+    SceneManager manager;
 
     public GameView(Context context){
         super(context);
@@ -71,6 +71,5 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     void recieveSensor(SensorEvent event){
         manager.recieveSensor(event);
     }
-
 
 }
