@@ -1,9 +1,6 @@
 package ordecha.igor.tiltsnake.Gameplay;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.util.Log;
 import ordecha.igor.tiltsnake.Utils;
 
@@ -26,6 +23,9 @@ class Snake {
     private int oldShownX=-1;
     private int oldShownY=-1;
     int total = 0;
+
+
+
 
 
     Snake(int color, int headColor, int size, int startX, int startY, int maX, int maxY, int speed){
@@ -54,6 +54,7 @@ class Snake {
             paint.setColor(utils.blendColors(headColor, color, realRatio));
             canvas.drawRect(tail[i], paint);
         }
+        drawPoint(canvas);
     }
 
     void update(float rotX, float rotY){
@@ -78,9 +79,9 @@ class Snake {
             }
             else{
                 shownX = oldShownX;
-                realX = oldShownX;
+                realX = oldShownX + (size/2);
                 shownY = oldShownY;
-                realY = oldShownY;
+                realY = oldShownY + (size/2);
             }
         }
     }
@@ -166,19 +167,7 @@ class Snake {
     }
 
     private boolean isGoingBackwards(int[] oldDir, int[] newDir){
-        if(oldDir[0]==-1 && newDir[0]==1){
-            return true;
-        }
-        else if(oldDir[0]==1 && newDir[0]==-1){
-            return true;
-        }
-        else if(oldDir[1]==-1 && newDir[1]==1){
-            return true;
-        }
-        else if(oldDir[1]==1 && newDir[1]==-1){
-            return true;
-        }
-        return false;
+        return oldDir[0]== -newDir[0] && oldDir[1]==-newDir[1];
     }
 
     void cheat(){
@@ -186,6 +175,11 @@ class Snake {
         justEaten = true;
         tail[total]=new Rect();
         tail[total].set(shownX, shownY, shownX+size, shownY+size);
+    }
+
+    private void drawPoint(Canvas canvas){
+        Paint pointPaint = new Paint(Color.rgb(255,255,255));
+        canvas.drawCircle(this.realX, this.realY, 10, pointPaint);
     }
 
 }
