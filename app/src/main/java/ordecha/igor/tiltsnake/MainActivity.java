@@ -31,6 +31,14 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     @Override
+    public void onResume(){
+        if(SceneManager.ACTIVE_SCENE == 1) {
+            SceneManager.ACTIVE_SCENE = 0;
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onSensorChanged(SensorEvent event){
         gmV.recieveSensor(event);
     }
@@ -42,19 +50,21 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onBackPressed () {
-        if(SceneManager.ACTIVE_SCENE==0){
+        if(SceneManager.ACTIVE_SCENE==1){
             if(backPressedTime + 2000 > System.currentTimeMillis()){
                 super.onBackPressed();
                 return;
             } else {
-                Toast.makeText(getBaseContext(), "Naciśnij ponownie by wyjść z gry", 2000).show();
+                Toast.makeText(getBaseContext(), "Naciśnij ponownie by wyjść z gry", Toast.LENGTH_SHORT).show();
             }
 
             backPressedTime = System.currentTimeMillis();
         }
+        else if(SceneManager.ACTIVE_SCENE==2){
+            SceneManager.ACTIVE_SCENE=0;
+        }
         else{
             super.onBackPressed();
-            return;
         }
 
     }
